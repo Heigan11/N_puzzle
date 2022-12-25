@@ -94,9 +94,11 @@ void Puzzle::clearStates()
 
 void Puzzle::solve()
 {
+	uint64_t startTime;
+
 	if (solver->isSolvable() == false)
 	{
-		printSolution("unsolvable", "-");
+		printSolution("unsolvable", "-", 0);
 		clearStates();
 		return ;
 	}
@@ -112,7 +114,8 @@ void Puzzle::solve()
 	else
 		heuristicFunc = &Puzzle::hammingHeuristic;	
 	solver->findSolution(heuristicFunc, search);
-	printSolution("solvable", heuristic);
+	startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	printSolution("solvable", heuristic, startTime);
 	clearStates();
 }
 
@@ -159,7 +162,7 @@ void Puzzle::printState(std::map<int, int> &state)
 	std::cout << std::endl;
 }
 
-void Puzzle::printSolution(std::string sStatus,std::string heuristic)
+void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t startTime)
 {
 	std::vector<std::map<int, int> > result;
 	int steps = 0;
@@ -230,8 +233,12 @@ void Puzzle::printSolution(std::string sStatus,std::string heuristic)
 	std::ofstream myFile;
 	myFile.open("history.txt", std::ios::app);
 
+	uint64_t ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    ms -= startTime;
+
 	if (myFile.is_open()) {
 		myFile << "____________________________________________________" << std::endl;
+		myFile << "Time to solution = " << ms << " ms." << std::endl;
 		myFile << "Total steps to solution = " << steps << std::endl;
 		myFile << "Time complexity (total states selected for OPENED queue): " << solver->nStates << std::endl;
 		myFile << "Size complexity (max number of states in memory at the same time: " << solver->maxNsim << std::endl;
@@ -239,14 +246,17 @@ void Puzzle::printSolution(std::string sStatus,std::string heuristic)
 	}
 
 	if (heuristic == "hamm"){
+		std::cout << "\033[31mTime to solution = " << ms << " ms.\033[0m" << std::endl;
 		std::cout << "\033[31mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[31mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[31mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;
 	} else if (heuristic == "euclid"){
+		std::cout << "\033[33mTime to solution = " << ms << " ms.\033[0m" << std::endl;
 		std::cout << "\033[33mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[33mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[33mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;
 	} else {
+		std::cout << "\033[32mTime to solution = " << ms << " ms.\033[0m" << std::endl;
 		std::cout << "\033[32mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[32mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[32mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;

@@ -16,6 +16,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 #include "PuzzleData.hpp"
 #include "Parser.hpp"
@@ -50,7 +51,7 @@ class Puzzle
 		Parser					parser;
 		Solver					*solver;
 
-		void					printSolution(std::string sState, std::string heuristic);
+		void					printSolution(std::string sState, std::string heuristic, uint64_t startTime);
 
 		void					clearStates();
 
