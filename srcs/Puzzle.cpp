@@ -224,10 +224,20 @@ void Puzzle::printSolution(std::string sStatus,std::string heuristic)
 	// 	result.pop_back();
 	// 	++steps;
 	// }
-
-
 		
 	std::cout << "____________________________________________________" << std::endl;
+
+	std::ofstream myFile;
+	myFile.open("history.txt", std::ios::app);
+
+	if (myFile.is_open()) {
+		myFile << "____________________________________________________" << std::endl;
+		myFile << "Total steps to solution = " << steps << std::endl;
+		myFile << "Time complexity (total states selected for OPENED queue): " << solver->nStates << std::endl;
+		myFile << "Size complexity (max number of states in memory at the same time: " << solver->maxNsim << std::endl;
+		myFile.close();
+	}
+
 	if (heuristic == "hamm"){
 		std::cout << "\033[31mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[31mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;

@@ -14,6 +14,8 @@
 
 #include <queue>
 #include <cmath>
+#include <iostream>
+#include <fstream>
 
 #include "PuzzleData.hpp"
 #include "Parser.hpp"
