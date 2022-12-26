@@ -57,7 +57,6 @@ void Puzzle::printStats(){
 					worstTime = time;
 				}
 			}	
-
         }
     }
     in.close();
@@ -67,7 +66,45 @@ void Puzzle::printStats(){
 } 
 
 void Puzzle::printCompare(){
-	std::cout << "----- printCompare() -----" << std::endl;
+
+	int bestTimeManhtn = -1;
+	int bestTimeEuclid = -1;
+	int bestTimeHamm = -1;
+
+	std::string line;
+ 
+    std::ifstream in("history.txt");
+    if (in.is_open()) {
+        while (getline(in, line))
+        {
+			if (line.find("Time to solution = ") != std::string::npos) {
+				std::string output = std::regex_replace(line, std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+				int time = stoi(output);
+				if (line.find("hamm") != std::string::npos){
+					if (bestTimeHamm > time || bestTimeHamm == -1){
+						bestTimeHamm = time;
+					}
+				} else if (line.find("euclid") != std::string::npos){
+					if (bestTimeEuclid > time || bestTimeEuclid == -1){
+						bestTimeEuclid = time;
+					}
+				} else {
+					if (bestTimeManhtn > time || bestTimeManhtn == -1){
+						bestTimeManhtn = time;
+					}
+				}
+			}	
+        }
+    }
+    in.close();
+	if (bestTimeManhtn > 0 && bestTimeEuclid > 0 && bestTimeHamm > 0){
+		std::cout << "Comparation of speed depend on heuristic: " << std::endl;
+		std::cout << "Manhattan = " << 100 << "%" << std::endl;
+		std::cout << "Euclidean = " << (int)((double) bestTimeManhtn / (double) bestTimeEuclid * 100)  << "%" << std::endl;
+		std::cout << "Hamm = " << (int)((double) bestTimeManhtn / (double) bestTimeHamm * 100) << "%" << std::endl;
+	} else {
+		std::cout << "You must put to history all types of heuristic(hamm, euclid, manhtn)" << std::endl;
+	}
 } 
 
 std::string	Puzzle::getHeuristic()
@@ -261,7 +298,7 @@ void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t 
 
 	if (myFile.is_open()) {
 		myFile << "____________________________________________________" << std::endl;
-		myFile << "Time to solution = " << ms << " ms." << std::endl;
+		myFile << "Time to solution = " << ms << " ms. Is a " << heuristic << std::endl;
 		myFile << "Total steps to solution = " << steps << std::endl;
 		myFile << "Time complexity (total states selected for OPENED queue): " << solver->nStates << std::endl;
 		myFile << "Size complexity (max number of states in memory at the same time: " << solver->maxNsim << std::endl;
@@ -269,17 +306,17 @@ void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t 
 	}
 
 	if (heuristic == "hamm"){
-		std::cout << "\033[31mTime to solution = " << ms << " ms.\033[0m" << std::endl;
+		std::cout << "\033[31mTime to solution = " << ms << " ms. Is a hamm.\033[0m" << std::endl;
 		std::cout << "\033[31mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[31mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[31mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;
 	} else if (heuristic == "euclid"){
-		std::cout << "\033[33mTime to solution = " << ms << " ms.\033[0m" << std::endl;
+		std::cout << "\033[33mTime to solution = " << ms << " ms. Is a euclid.\033[0m" << std::endl;
 		std::cout << "\033[33mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[33mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[33mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;
 	} else {
-		std::cout << "\033[32mTime to solution = " << ms << " ms.\033[0m" << std::endl;
+		std::cout << "\033[32mTime to solution = " << ms << " ms. Is a manhtn.\033[0m" << std::endl;
 		std::cout << "\033[32mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[32mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[32mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;
