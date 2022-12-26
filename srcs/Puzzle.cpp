@@ -32,6 +32,44 @@ Puzzle::~Puzzle()
 	delete this->solver;
 }
 
+void Puzzle::printStats(){
+
+	int countRuns = 0;
+	int bestTime = -1;
+	int worstTime = -1;
+
+	std::string line;
+ 
+    std::ifstream in("history.txt");
+    if (in.is_open()) {
+        while (getline(in, line))
+        {
+            if (line == "____________________________________________________"){
+				countRuns++;
+			}
+			if (line.find("Time to solution = ") != std::string::npos) {
+				std::string output = std::regex_replace(line, std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+				int time = stoi(output);
+				if (bestTime > time || bestTime == -1){
+					bestTime = time;
+				}
+				if (worstTime < time || worstTime == -1){
+					worstTime = time;
+				}
+			}	
+
+        }
+    }
+    in.close();
+	std::cout << "Count of runs = " << countRuns << std::endl;
+	std::cout << "Best time = " << bestTime << " ms" << std::endl;
+	std::cout << "Worst time = " << worstTime << " ms" << std::endl;
+} 
+
+void Puzzle::printCompare(){
+	std::cout << "----- printCompare() -----" << std::endl;
+} 
+
 std::string	Puzzle::getHeuristic()
 {
 	return (this->heuristic);
@@ -49,6 +87,7 @@ PuzzleData Puzzle::getPuzzle()
 
 void	Puzzle::parseData(int argc, char **argv)
 {
+
 	PuzzlePack tmp;
 	tmp = this->parser.cmdParser(argc, argv);
 	
@@ -112,12 +151,16 @@ void Puzzle::solve()
 	else if (heuristic == "euclid")
 		heuristicFunc = &Puzzle::euclidianHeuristic;
 	else
-		heuristicFunc = &Puzzle::hammingHeuristic;	
+		heuristicFunc = &Puzzle::hammingHeuristic;
+	startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();	
+
 	solver->findSolution(heuristicFunc, search);
-	startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
 	printSolution("solvable", heuristic, startTime);
 	clearStates();
 }
+
+
 
 void Puzzle::printState(std::map<int, int> &state)
 {
@@ -174,6 +217,10 @@ void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t 
 	printState(solver->goalState);
 	std::cout << std::endl;
 	std::cout << "|" << sStatus << "|" << std::endl;
+
+	if (sStatus == "unsolvable"){
+		return;
+	}
 	
 	State *solution = solver->solution;
 	if (solution != NULL)
@@ -203,30 +250,6 @@ void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t 
 			++steps;
 		}
 	}
-	// State tmp;
-	// while (solution->father != NULL)
-	// {
-	// 	tmp = *solution;
-	// 	std::cout << solution->h << "|" << solution->g << std::endl;
-	// 	result.push_back(solution->state);
-	// 	solution = solution->father;
-		
-	// 	std::cout << "--" << std::endl;
-	// 	tmp.father = NULL;
-	// 	manhattanHeuristic(&tmp);
-	// 	std::cout << tmp.h << std::endl;
-	// 	std::cout << "---------" << std::endl;
-	// }
-	// std::cout << "____________________________________________________" << std::endl;
-	// printState(solver->initialState);
-	// std::cout << std::endl;
-	// while (result.empty() == false)
-	// {
-	// 	printState(*(result.rbegin()));
-	// 	std::cout << std::endl;
-	// 	result.pop_back();
-	// 	++steps;
-	// }
 		
 	std::cout << "____________________________________________________" << std::endl;
 
@@ -261,6 +284,11 @@ void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t 
 		std::cout << "\033[32mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[32mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;
 	}
+
+	std::cout << "1234"  << std::flush;
+	std::cout << "\r567" << std::flush;
+	std::cout << "\b8"   << std::endl;
+
 	delete(solver->solution);
 	// unsigned long i = 0;
 	// for(; i < solver->opened.size(); ++i)

@@ -17,6 +17,8 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <thread>
+#include <regex>
 
 #include "PuzzleData.hpp"
 #include "Parser.hpp"
@@ -42,6 +44,9 @@ class Puzzle
 		void					solvePuzzle();
 
 		void					printState(std::map<int, int> &state);
+		
+		void 					printStats();
+		void 					printCompare();
 		
 	private:
 

@@ -95,15 +95,8 @@ void Solver::findSolution(void (Puzzle::*heuristic)(State*), std::string &search
 	start->movedTile = -1;
 	opened.push(start);
 	nStates += 1;
-	
 
-	
-	// std::cout << opened.top()->h << std::endl;
-	// std::cout << opened.top()->state.size() << std::endl;
-	
-	// std::cout << "Hello" << std::endl;
 	startAstar();
-	
 }
 
 // private methods ************************************************************

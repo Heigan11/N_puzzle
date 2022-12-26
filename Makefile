@@ -32,7 +32,8 @@ HEAD		=	$(INC_DIR)/Parser.hpp \
 				$(INC_DIR)/Solver.hpp \
 				$(INC_DIR)/State.hpp \
 
-CFLAGS		=	-Wextra -Werror -Wall $(INC) -std=c++11
+# CFLAGS		=	-Wextra -Werror -Wall $(INC) -std=c++11
+CFLAGS		=	-Werror $(INC) -std=c++11
 
 OPTFLAGS	=	-O0
 
@@ -53,8 +54,6 @@ clean:
 
 fclean: clean 
 	$(RM) $(NAME)
-	$(RM) puzzle3.puzzle
-	$(RM) puzzle4.puzzle
 
 re: fclean all
 
