@@ -76,14 +76,14 @@ void Puzzle::printCompare()
 			{
 				std::string output = std::regex_replace(line, std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
 				int time = stoi(output);
-				if (line.find("hamm") != std::string::npos)
+				if (line.find("ham") != std::string::npos)
 				{
 					if (bestTimeHamm > time || bestTimeHamm == -1)
 					{
 						bestTimeHamm = time;
 					}
 				}
-				else if (line.find("euclid") != std::string::npos)
+				else if (line.find("euc") != std::string::npos)
 				{
 					if (bestTimeEuclid > time || bestTimeEuclid == -1)
 					{
@@ -110,7 +110,7 @@ void Puzzle::printCompare()
 	}
 	else
 	{
-		std::cout << "You must put to history all types of heuristic(hamm, euclid, manhtn)" << std::endl;
+		std::cout << "You must put to history all types of heuristic(ham, euc, man)" << std::endl;
 	}
 }
 
@@ -172,11 +172,11 @@ void Puzzle::solve()
 	}
 
 	void (Puzzle::*heuristicFunc)(State * state);
-	if (heuristic == "manhtn")
+	if (heuristic == "man")
 	{
 		heuristicFunc = &Puzzle::manhattanHeuristic;
 	}
-	else if (heuristic == "euclid")
+	else if (heuristic == "euc")
 	{
 		heuristicFunc = &Puzzle::euclidianHeuristic;
 	}
@@ -298,23 +298,23 @@ void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t 
 		myFile << "Size complexity (max number of states in memory at the same time: " << solver->maxNsim << std::endl;
 		myFile.close();
 	}
-	if (heuristic == "hamm")
+	if (heuristic == "ham")
 	{
-		std::cout << "\033[31mTime to solution = " << ms << " ms. Is a hamm.\033[0m" << std::endl;
+		std::cout << "\033[31mTime to solution = " << ms << " ms. Is a ham.\033[0m" << std::endl;
 		std::cout << "\033[31mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[31mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[31mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;
 	}
-	else if (heuristic == "euclid")
+	else if (heuristic == "euc")
 	{
-		std::cout << "\033[33mTime to solution = " << ms << " ms. Is a euclid.\033[0m" << std::endl;
+		std::cout << "\033[33mTime to solution = " << ms << " ms. Is a euc.\033[0m" << std::endl;
 		std::cout << "\033[33mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[33mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[33mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;
 	}
 	else
 	{
-		std::cout << "\033[32mTime to solution = " << ms << " ms. Is a manhtn.\033[0m" << std::endl;
+		std::cout << "\033[32mTime to solution = " << ms << " ms. Is a man.\033[0m" << std::endl;
 		std::cout << "\033[32mTotal steps to solution = " << steps << "\033[0m" << std::endl;
 		std::cout << "\033[32mTime complexity (total states selected for OPENED queue): " << solver->nStates << "\033[0m" << std::endl;
 		std::cout << "\033[32mSize complexity (max number of states in memory at the same time: " << solver->maxNsim << "\033[0m" << std::endl;

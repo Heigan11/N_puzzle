@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.ts": "typescript",
-        "queue": "cpp"
+        "queue": "cpp",
+        "filesystem": "cpp"
     }
 }

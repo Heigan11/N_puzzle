@@ -15,20 +15,20 @@ int PuzzleData::getPuzzleSize() const {
 }
 
 std::vector<int> PuzzleData::getTiles() const {
-	return (this->tiles);	
+	return (this->tiles);
 }
 
 std::ostream& operator<<(std::ostream &stream, const PuzzleData &puzzle) {
-	int n = puzzle.getPuzzleSize();
-	std::vector<int> tmp = puzzle.getTiles();
+	int size = puzzle.getPuzzleSize();
+	std::vector<int> tmpTiles = puzzle.getTiles();
 	int cntr = 0;
-	std::vector<int>::iterator it = tmp.begin();
+	std::vector<int>::iterator it = tmpTiles.begin();
 
-	for (; it != tmp.end(); ++it) {
+	for (; it != tmpTiles.end(); ++it) {
 		stream << *it;
 		cntr += 1;
-		if (cntr == n) {
-			if (it == (tmp.end() - 1)) {
+		if (cntr == size) {
+			if (it == (tmpTiles.end() - 1)) {
 				break ;
 			}
 			stream << std::endl;
