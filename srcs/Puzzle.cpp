@@ -9,7 +9,7 @@ Puzzle::Puzzle() {
 	this->solver = new Solver(this);
 }
 
-Puzzle::Puzzle(PuzzleData &newPuzzle, std::string &heuristicType, std::string &searchType) : 
+Puzzle::Puzzle(PuzzleData &newPuzzle, std::string &heuristicType, std::string &searchType) :
 	heuristic(heuristicType), search(searchType), puzzle(newPuzzle) {
 	this->parser = Parser();
 }
@@ -25,7 +25,7 @@ void Puzzle::printStats(){
 	int worstTime = -1;
 
 	std::string line;
- 
+
     std::ifstream in("history.txt");
     if (in.is_open()) {
         while (getline(in, line))
@@ -42,14 +42,14 @@ void Puzzle::printStats(){
 				if (worstTime < time || worstTime == -1){
 					worstTime = time;
 				}
-			}	
+			}
         }
     }
     in.close();
 	std::cout << "Count of runs = " << countRuns << std::endl;
 	std::cout << "Best time = " << bestTime << " ms" << std::endl;
 	std::cout << "Worst time = " << worstTime << " ms" << std::endl;
-} 
+}
 
 void Puzzle::printCompare(){
 
@@ -58,7 +58,7 @@ void Puzzle::printCompare(){
 	int bestTimeHamm = -1;
 
 	std::string line;
- 
+
     std::ifstream in("history.txt");
     if (in.is_open()) {
         while (getline(in, line))
@@ -79,7 +79,7 @@ void Puzzle::printCompare(){
 						bestTimeManhtn = time;
 					}
 				}
-			}	
+			}
         }
     }
     in.close();
@@ -91,7 +91,7 @@ void Puzzle::printCompare(){
 	} else {
 		std::cout << "You must put to history all types of heuristic(hamm, euclid, manhtn)" << std::endl;
 	}
-} 
+}
 
 std::string	Puzzle::getHeuristic() {
 	return (this->heuristic);
@@ -102,7 +102,7 @@ std::string Puzzle::getSearch() {
 }
 
 PuzzleData Puzzle::getPuzzle() {
-	return (this->puzzle);	
+	return (this->puzzle);
 }
 
 void	Puzzle::parseData(int argc, char **argv) {
@@ -128,7 +128,7 @@ void Puzzle::clearStates() {
 	while (solver->closed.size()) {
 		delete (*(solver->closed.begin()));
 		solver->closed.erase(solver->closed.begin());
-	}	
+	}
 }
 
 void Puzzle::solve() {
@@ -139,7 +139,7 @@ void Puzzle::solve() {
 		clearStates();
 		return ;
 	}
-	
+
 	void (Puzzle::*heuristicFunc)(State *state);
 	if (heuristic == "manhtn") {
 		heuristicFunc = &Puzzle::manhattanHeuristic;
@@ -148,7 +148,7 @@ void Puzzle::solve() {
 	} else {
 		heuristicFunc = &Puzzle::hammingHeuristic;
 	}
-	startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();	
+	startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	solver->findSolution(heuristicFunc, search);
 	printSolution("solvable", heuristic, startTime);
 	clearStates();
@@ -164,14 +164,14 @@ void Puzzle::printState(std::map<int, int> &state)
 	int tmp;
 
 	std::map<int, int>::iterator it;
-	
-	for (; i < (size * size); ++i) {	
+
+	for (; i < (size * size); ++i) {
 		it = state.begin();
 		for (; it != state.end(); ++it) {
 			if (i == it->second) {
 				tmp = it->first;
 			}
-		}	
+		}
 		std::cout << tmp;
 		cntr += 1;
 		if (cntr == size){
@@ -188,7 +188,7 @@ void Puzzle::printState(std::map<int, int> &state)
 			} else {
 				std::cout << " ";
 			}
-		}	
+		}
 	}
 	std::cout << std::endl;
 }
@@ -209,7 +209,7 @@ void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t 
 	if (sStatus == "unsolvable"){
 		return;
 	}
-	
+
 	State *solution = solver->solution;
 	if (solution != NULL) {
 		State tmp;
@@ -230,7 +230,7 @@ void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t 
 			++steps;
 		}
 	}
-		
+
 	std::cout << "____________________________________________________" << std::endl;
 
 	std::ofstream myFile;
@@ -266,10 +266,14 @@ void Puzzle::printSolution(std::string sStatus, std::string heuristic, uint64_t 
 	delete(solver->solution);
 }
 
+// Манхэттенское расстояние, или расстояние городских кварталов между точками
+//A = (x1, y1) и B = (x2, y2), определяется как сумма абсолютной разности
+// их соответствующих координат: MD = |x1-x2| + |y1-y2|
+
 void	Puzzle::manhattanHeuristic(State *state) {
-	int heuristic = 0; 
+	int heuristic = 0;
 	int current = 0;
-	unsigned long i = 1; 
+	unsigned long i = 1;
 	unsigned long size = puzzle.getPuzzleSize();
 	if (state->father == NULL) {
 		for (; i < (size * size); ++i) {
@@ -281,19 +285,20 @@ void	Puzzle::manhattanHeuristic(State *state) {
 		int tile = 0;
 		heuristic = state->h;
 		tile = state->reverse.at(state->movedTile);
+		// N_row = current / size (y)
+		// N_col = current % size (x)
 		current = abs(state->state.at(0) - solver->goalState.at(tile));
 		heuristic -= ((current / size) + (current % size));
 		current = abs(state->state.at(tile) - solver->goalState.at(tile));
-		heuristic += ((current / size) + (current % size));	
+		heuristic += ((current / size) + (current % size));
 		state->h = heuristic;
 	}
-	
 }
 
 void Puzzle::euclidianHeuristic(State *state) {
-	int heuristic = 0; 
+	int heuristic = 0;
 	int current = 0;
-	unsigned long i = 1; 
+	unsigned long i = 1;
 	unsigned long size = puzzle.getPuzzleSize();
 	if (state->father == NULL) {
 		for (; i < (size * size); ++i) {
@@ -304,7 +309,7 @@ void Puzzle::euclidianHeuristic(State *state) {
 	} else {
 		int tile = 0;
 		heuristic = state->h;
-		tile = state->reverse.at(state->movedTile);		
+		tile = state->reverse.at(state->movedTile);
 		current = abs(state->state.at(0) - solver->goalState.at(tile));
 		heuristic -= int(sqrt(((current / size) * (current / size)) + ((current % size) * (current % size))));
 		current = abs(state->state.at(tile) - solver->goalState.at(tile));
@@ -314,8 +319,8 @@ void Puzzle::euclidianHeuristic(State *state) {
 }
 
 void	Puzzle::hammingHeuristic(State *state) {
-	int heuristic = 0; 
-	unsigned long i = 1; 
+	int heuristic = 0;
+	unsigned long i = 1;
 	unsigned long size = puzzle.getPuzzleSize();
 	if (state->father == NULL) {
 		for (; i < (size * size); ++i) {

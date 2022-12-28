@@ -15,7 +15,7 @@ class Solver
 {
 
 	friend class Puzzle;
-	
+
 	public:
 
 		Solver(Puzzle *puzzle);
@@ -35,7 +35,7 @@ class Solver
 		std::unordered_set<State*, HashState, HashStateCompare> closed;
 
 		Puzzle					*puzzle;
-		
+
 		int						nSize;
 		std::map<int, int>		goalState;
 		std::map<int, int>		initialState;
@@ -46,18 +46,18 @@ class Solver
 		unsigned int			maxNsim;
 
 		State 					*solution;
-		
+
 		void					(Puzzle::*heuristicFunc)(State*);
 
 		void					increaseNbr(int *nbr);
 		int						countInversion();
 
 		void					generateExtremePos();
-		
+
 		bool					isSolvable();
 
 		std::map<int,int>		setReverseState(std::map<int,int> toRev);
-	
+
 		State					*moveRight(State *state);
 		State					*moveDown(State *state);
 		State					*moveLeft(State *state);

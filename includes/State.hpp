@@ -14,7 +14,7 @@ struct State
 
 		State					*father;
 		int						movedTile;
-	
+
 };
 
 struct HashState
@@ -47,15 +47,17 @@ struct HashStateCompare
 
 struct CompareStates
 {
-	
+
 	std::string		search;
 
 	CompareStates() : search("default") {};
 	CompareStates(std::string initS) : search(initS) {}
-	
+
 	bool 			operator()(State *first, State *second)
 	{
-		
+		// где g — это стоимость достижения s из начального состояния
+		// (число ходов от начального состояния до s),
+		// h — рациональный компонент агента (эвристика)
 		if (search == "uniform")
 		{
 			return (first->g > second->g);
@@ -71,6 +73,6 @@ struct CompareStates
 
 		return (false);
 	}
-	
+
 };
 
