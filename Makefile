@@ -1,14 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: bchelste <bchelste@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/09/11 20:13:55 by bchelste          #+#    #+#              #
-#    Updated: 2022/09/19 00:20:16 by bchelste         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
 NAME		=	n-puzzle
 INC_DIR		=	includes
@@ -32,8 +21,7 @@ HEAD		=	$(INC_DIR)/Parser.hpp \
 				$(INC_DIR)/Solver.hpp \
 				$(INC_DIR)/State.hpp \
 
-# CFLAGS		=	-Wextra -Werror -Wall $(INC) -std=c++11
-CFLAGS		=	-Werror $(INC) -std=c++11
+CFLAGS		=	-Wextra -Werror -Wall $(INC) -std=c++11
 
 OPTFLAGS	=	-O0
 

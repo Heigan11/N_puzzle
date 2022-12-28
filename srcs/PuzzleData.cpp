@@ -1,69 +1,46 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   PuzzleData.cpp                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bchelste <bchelste@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/14 20:04:39 by bchelste          #+#    #+#             */
-/*   Updated: 2022/09/18 22:05:22 by bchelste         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "PuzzleData.hpp"
 
-PuzzleData::PuzzleData()
-{
+PuzzleData::PuzzleData() {
 	this->puzzleSize = 0;
 	this->tiles = std::vector<int>();
 }
 
-PuzzleData::PuzzleData(int &size, std::vector<int> &newTiles) : puzzleSize(size), tiles(newTiles)
-{
+PuzzleData::PuzzleData(int &size, std::vector<int> &newTiles) : puzzleSize(size), tiles(newTiles) { }
 
-}
+PuzzleData::~PuzzleData() { }
 
-PuzzleData::~PuzzleData()
-{
-	
-}
-
-int PuzzleData::getPuzzleSize() const
-{
+int PuzzleData::getPuzzleSize() const {
 	return (this->puzzleSize);
 }
 
-std::vector<int> PuzzleData::getTiles() const
-{
+std::vector<int> PuzzleData::getTiles() const {
 	return (this->tiles);	
 }
 
-std::ostream& operator<<(std::ostream &stream, const PuzzleData &puzzle)
-{
+std::ostream& operator<<(std::ostream &stream, const PuzzleData &puzzle) {
 	int n = puzzle.getPuzzleSize();
 	std::vector<int> tmp = puzzle.getTiles();
 	int cntr = 0;
 	std::vector<int>::iterator it = tmp.begin();
 
-	for (; it != tmp.end(); ++it)
-	{
+	for (; it != tmp.end(); ++it) {
 		stream << *it;
 		cntr += 1;
-		if (cntr == n)
-		{
-			if (it == (tmp.end() - 1))
+		if (cntr == n) {
+			if (it == (tmp.end() - 1)) {
 				break ;
+			}
 			stream << std::endl;
 			cntr = 0;
-		}
-		else
-		{
-			if (*it < 10)
+		} else {
+			if (*it < 10) {
 				stream << "   ";
-			else if ((*it >= 10) &&  (*it <= 99))
+			} else if ((*it >= 10) &&  (*it <= 99)) {
 				stream << "  ";
-			else
+			} else {
 				stream << " ";
+			}
 		}
 	}
 	return (stream);
