@@ -9,8 +9,8 @@ SRCS		=	$(SRC_DIR)/main.cpp \
 				$(SRC_DIR)/Parser.cpp \
 				$(SRC_DIR)/Puzzle.cpp \
 				$(SRC_DIR)/PuzzleData.cpp  \
-				$(SRC_DIR)/Solver.cpp 
-				
+				$(SRC_DIR)/Runner.cpp
+
 OBJS		=	$(SRCS:.cpp=.o)
 
 INC			=	-I$(INC_DIR)
@@ -18,7 +18,7 @@ INC			=	-I$(INC_DIR)
 HEAD		=	$(INC_DIR)/Parser.hpp \
 				$(INC_DIR)/Puzzle.hpp \
 				$(INC_DIR)/PuzzleData.hpp \
-				$(INC_DIR)/Solver.hpp \
+				$(INC_DIR)/Runner.hpp \
 				$(INC_DIR)/State.hpp \
 
 CFLAGS		=	-Wextra -Werror -Wall $(INC) -std=c++11
@@ -40,7 +40,7 @@ $(NAME): $(OBJS)
 clean:
 	$(RM) $(OBJS)
 
-fclean: clean 
+fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all

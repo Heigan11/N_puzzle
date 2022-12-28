@@ -1,11 +1,11 @@
 
-#include "Solver.hpp"
+#include "Runner.hpp"
 
-Solver::Solver(Puzzle *_puzzle) : puzzle(_puzzle), nSize(0), nStates(0), maxNsim(0), solution(NULL), heuristicFunc(NULL) {}
+Runner::Runner(Puzzle *_puzzle) : puzzle(_puzzle), nSize(0), nStates(0), maxNsim(0), solution(NULL), heuristicFunc(NULL) {}
 
-Solver::~Solver() {}
+Runner::~Runner() {}
 
-void Solver::setInitialState(const std::vector<int> &puzzle, const int &size)
+void Runner::setInitialState(const std::vector<int> &puzzle, const int &size)
 {
 	this->nSize = size;
 	std::vector<int>::const_iterator it = puzzle.begin();
@@ -16,7 +16,7 @@ void Solver::setInitialState(const std::vector<int> &puzzle, const int &size)
 	maxNsim += 1;
 }
 
-void Solver::setGoalState()
+void Runner::setGoalState()
 {
 	int nbr = 1;
 	int finish = (nSize % 2 == 0) ? (nSize / 2) : (nSize / 2 + 1);
@@ -49,7 +49,7 @@ void Solver::setGoalState()
 	generateExtremePos();
 }
 
-std::map<int, int> Solver::setReverseState(std::map<int, int> toRev)
+std::map<int, int> Runner::setReverseState(std::map<int, int> toRev)
 {
 	std::map<int, int> reverse;
 	std::map<int, int>::iterator it = toRev.begin();
@@ -60,7 +60,7 @@ std::map<int, int> Solver::setReverseState(std::map<int, int> toRev)
 	return (reverse);
 }
 
-void Solver::findSolution(void (Puzzle::*heuristic)(State *), std::string &search)
+void Runner::findSolution(void (Puzzle::*heuristic)(State *), std::string &search)
 {
 	CompareStates comp = CompareStates(search);
 	heuristicFunc = heuristic;
@@ -78,7 +78,7 @@ void Solver::findSolution(void (Puzzle::*heuristic)(State *), std::string &searc
 	startAstar();
 }
 
-void Solver::increaseNbr(int *nbr)
+void Runner::increaseNbr(int *nbr)
 {
 	*nbr += 1;
 	if (*nbr == (nSize * nSize))
@@ -87,7 +87,7 @@ void Solver::increaseNbr(int *nbr)
 	}
 }
 
-int Solver::countInversion()
+int Runner::countInversion()
 {
 	int missplaced = 0;
 	unsigned long totalSize = nSize * nSize;
@@ -104,7 +104,7 @@ int Solver::countInversion()
 	return (missplaced);
 }
 
-void Solver::generateExtremePos()
+void Runner::generateExtremePos()
 {
 	int i;
 	int tmp;
@@ -158,7 +158,7 @@ void Solver::generateExtremePos()
 	extremePos.emplace('l', positions);
 }
 
-bool Solver::isSolvable()
+bool Runner::isSolvable()
 {
 	// https://www.geeksforgeeks.org/check-instance-15-puzzle-solvable/
 	int inversions = countInversion();
@@ -184,7 +184,7 @@ bool Solver::isSolvable()
 	return false;
 }
 
-State *Solver::moveRight(State *oldState)
+State *Runner::moveRight(State *oldState)
 {
 	int zeroPos = oldState->state.at(0);
 	int victimValue;
@@ -217,7 +217,7 @@ State *Solver::moveRight(State *oldState)
 	return (newState);
 }
 
-State *Solver::moveDown(State *oldState)
+State *Runner::moveDown(State *oldState)
 {
 	int zeroPos = oldState->state.at(0);
 	int victimValue;
@@ -251,7 +251,7 @@ State *Solver::moveDown(State *oldState)
 	return (newState);
 }
 
-State *Solver::moveLeft(State *oldState)
+State *Runner::moveLeft(State *oldState)
 {
 	int zeroPos = oldState->state.at(0);
 	int victimValue;
@@ -285,7 +285,7 @@ State *Solver::moveLeft(State *oldState)
 	return (newState);
 }
 
-State *Solver::moveUp(State *oldState)
+State *Runner::moveUp(State *oldState)
 {
 	int zeroPos = oldState->state.at(0);
 	int victimValue;
@@ -319,12 +319,12 @@ State *Solver::moveUp(State *oldState)
 	return (newState);
 }
 
-bool Solver::isSolved(State *current)
+bool Runner::isSolved(State *current)
 {
 	return (current->h == 0);
 }
 
-void Solver::increaseMaxNSim()
+void Runner::increaseMaxNSim()
 {
 	unsigned int tmp = opened.size() + closed.size();
 	if (tmp > maxNsim)
@@ -333,7 +333,7 @@ void Solver::increaseMaxNSim()
 	}
 }
 
-void Solver::startAstar()
+void Runner::startAstar()
 {
 	State *current = NULL;
 
@@ -359,7 +359,7 @@ void Solver::startAstar()
 	}
 }
 
-void Solver::generateNewStates(State *parent)
+void Runner::generateNewStates(State *parent)
 {
 	State *newState;
 	newState = moveRight(parent);
@@ -376,7 +376,7 @@ void Solver::generateNewStates(State *parent)
 	newState = NULL;
 }
 
-void Solver::addState(State *newState)
+void Runner::addState(State *newState)
 {
 	if (newState != NULL)
 	{

@@ -11,15 +11,15 @@
 
 class Puzzle;
 
-class Solver
+class Runner
 {
 
 	friend class Puzzle;
 
 	public:
 
-		Solver(Puzzle *puzzle);
-		virtual ~Solver();
+		Runner(Puzzle *puzzle);
+		virtual ~Runner();
 
 		void	setInitialState(const std::vector<int> &puzzle, const int &size);
 		void	setGoalState();

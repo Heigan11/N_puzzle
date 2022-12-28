@@ -9,11 +9,11 @@
 
 #include "PuzzleData.hpp"
 #include "Parser.hpp"
-#include "Solver.hpp"
+#include "Runner.hpp"
 #include "Puzzle.hpp"
 
 int main(int argc, char **argv)
-{	
+{
 
 	Puzzle puzzle = Puzzle();
 

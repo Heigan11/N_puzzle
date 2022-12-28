@@ -11,12 +11,12 @@
 
 #include "PuzzleData.hpp"
 #include "Parser.hpp"
-#include "Solver.hpp"
+#include "Runner.hpp"
 #include "State.hpp"
 
-class Solver;
+class Runner;
 
-class Puzzle 
+class Puzzle
 {
 
 	public:
@@ -33,17 +33,17 @@ class Puzzle
 		void					solvePuzzle();
 
 		void					printState(std::map<int, int> &state);
-		
+
 		void 					printStats();
 		void 					printCompare();
-		
+
 	private:
 
 		std::string				heuristic;
 		std::string				search;
 		PuzzleData				puzzle;
 		Parser					parser;
-		Solver					*solver;
+		Runner					*solver;
 
 		void					printSolution(std::string sState, std::string heuristic, uint64_t startTime);
 
@@ -54,5 +54,5 @@ class Puzzle
 		void					manhattanHeuristic(State *state);
 		void					euclidianHeuristic(State *state);
 		void					hammingHeuristic(State *state);
-		
+
 };
